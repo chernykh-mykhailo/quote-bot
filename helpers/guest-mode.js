@@ -188,13 +188,26 @@ const uploadStickerForGuest = async (ctx, buffer) => {
   const ownerId = cfg.ownerId
   if (!ownerId) throw new Error('uploadStickerForGuest: missing globalStickerSet.ownerId')
 
-  const setBefore = await ctx.telegram.getStickerSet(setName).catch(() => ({ stickers: [] }))
-  const beforeIds = new Set((setBefore.stickers || []).map((s) => s.file_unique_id))
+  let setBefore = null
+  try {
+    setBefore = await ctx.telegram.getStickerSet(setName)
+  } catch (error) {
+    // Sticker set does not exist yet
+  }
+  const beforeIds = new Set(((setBefore && setBefore.stickers) || []).map((s) => s.file_unique_id))
 
-  await ctx.telegram.addStickerToSet(ownerId, setName.toLowerCase(), {
-    png_sticker: { source: buffer },
-    emojis: '💬'
-  }, true)
+  if (!setBefore) {
+    const packTitle = `QuotLy Guest Pack @${me.username}`
+    await ctx.telegram.createNewStickerSet(ownerId, setName.toLowerCase(), packTitle, {
+      png_sticker: { source: buffer },
+      emojis: '💬'
+    })
+  } else {
+    await ctx.telegram.addStickerToSet(ownerId, setName.toLowerCase(), {
+      png_sticker: { source: buffer },
+      emojis: '💬'
+    }, true)
+  }
 
   const setAfter = await ctx.telegram.getStickerSet(setName)
   const newCandidates = (setAfter.stickers || []).filter((s) => !beforeIds.has(s.file_unique_id))
