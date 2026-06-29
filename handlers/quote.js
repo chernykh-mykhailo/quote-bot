@@ -1242,8 +1242,9 @@ ${JSON.stringify(messageForAIContext)}
               { text: '👎 0', callback_data: `irate:${guestQuoteId}:👎` }
             ]
           ]
-          if (ctx.botInfo && ctx.botInfo.username) {
-            buttons.push([{ text: 'Open Quotly →', url: `https://t.me/${ctx.botInfo.username}` }])
+          const botUsername = ctx.botInfo?.username || ctx.me || (await ctx.telegram.getMe().catch(() => null))?.username
+          if (botUsername) {
+            buttons.push([{ text: 'Open Quotly →', url: `https://t.me/${botUsername}/app?startapp=q_${guestQuoteId}` }])
           }
           replyMarkup = { reply_markup: { inline_keyboard: buttons } }
         } else {

@@ -41,19 +41,27 @@ module.exports = async ctx => {
   ctx.state.answerCbQuery = [resultText]
 
   if (rateType === 'irate') {
-    await ctx.editMessageReplyMarkup({
-      inline_keyboard: [
-        [
-          {
-            text: `👍 ${quoteDb.rate.votes[0].vote.length || ''}`,
-            callback_data: `irate:${quoteDb._id}:👍`
-          },
-          {
-            text: `👎 ${quoteDb.rate.votes[1].vote.length || ''}`,
-            callback_data: `irate:${quoteDb._id}:👎`
-          }
-        ]
+    const inlineKeyboard = [
+      [
+        {
+          text: `👍 ${quoteDb.rate.votes[0].vote.length || ''}`,
+          callback_data: `irate:${quoteDb._id}:👍`
+        },
+        {
+          text: `👎 ${quoteDb.rate.votes[1].vote.length || ''}`,
+          callback_data: `irate:${quoteDb._id}:👎`
+        }
       ]
+    ]
+
+    // Preserve the second row (Open Quotly button) if it exists
+    const originalKeyboard = ctx.callbackQuery.message?.reply_markup?.inline_keyboard
+    if (originalKeyboard && originalKeyboard.length > 1) {
+      inlineKeyboard.push(originalKeyboard[1])
+    }
+
+    await ctx.editMessageReplyMarkup({
+      inline_keyboard: inlineKeyboard
     }).catch(() => {})
   } else {
     const advKeyboard = ctx.callbackQuery.message.reply_markup.inline_keyboard.pop().pop()
