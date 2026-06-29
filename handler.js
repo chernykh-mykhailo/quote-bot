@@ -207,10 +207,8 @@ bot.use(async (ctx, next) => {
       text = args ? `/q ${args}` : '/q'
     } else {
       // No mention and no /command — this is a reply to one of our previous
-      // guest messages (Telegram still fires guest_message in that case).
-      // Treat the bare text as quote source: dispatch /q with no args, the
-      // handler will pick up reply_to_message or the message itself.
-      text = '/q'
+      // guest messages. Silently ignore it as the user did not explicitly summon the bot.
+      return
     }
   } else {
     text = rawText
