@@ -54,10 +54,11 @@ module.exports = async ctx => {
       ]
     ]
 
-    // Preserve the second row (Open Quotly button) if it exists
-    const originalKeyboard = ctx.callbackQuery.message?.reply_markup?.inline_keyboard
-    if (originalKeyboard && originalKeyboard.length > 1) {
-      inlineKeyboard.push(originalKeyboard[1])
+    const botUsername = ctx.botInfo?.username || ctx.me || (await ctx.telegram.getMe().catch(() => null))?.username
+    if (botUsername) {
+      inlineKeyboard.push([
+        { text: 'Open Quotly →', url: `https://t.me/${botUsername}/app?startapp=q_${quoteDb._id}` }
+      ])
     }
 
     await ctx.editMessageReplyMarkup({
