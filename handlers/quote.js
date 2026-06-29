@@ -643,6 +643,8 @@ module.exports = async (ctx, next) => {
     if (quoteMessage.caption) {
       text = quoteMessage.caption
       message.entities = quoteMessage.caption_entities
+    } else if (quoteMessage.dice) {
+      text = quoteMessage.dice.emoji
     } else {
       text = quoteMessage.text
       message.entities = quoteMessage.entities
