@@ -183,8 +183,11 @@ const answerGuestDocument = (ctx, fileId, extra = {}) => {
 const uploadStickerForGuest = async (ctx, buffer) => {
   const cfg = (ctx.config && ctx.config.globalStickerSet) || null
   if (!cfg) throw new Error('uploadStickerForGuest: no globalStickerSet in config')
-  const me = ctx.botInfo || await ctx.telegram.getMe()
-  const setName = (cfg.name || 'default') + me.username
+  let setNamePrefix = cfg.name || 'default'
+  if (!setNamePrefix.endsWith('_by_') && !setNamePrefix.endsWith('by_')) {
+    setNamePrefix = setNamePrefix.replace(/_$/, '') + '_by_'
+  }
+  const setName = setNamePrefix + me.username
   const ownerId = cfg.ownerId
   if (!ownerId) throw new Error('uploadStickerForGuest: missing globalStickerSet.ownerId')
 
@@ -278,7 +281,7 @@ const wrapGuestProxy = (ctx) => {
       ctx.state.guest.lastStickerFileUniqueId = fileUniqueId
       return answerGuestSticker(ctx, fileId, cleanExtra)
     } catch (err) {
-      console.warn('[guest] sticker upload failed:', err && err.message)
+      console.error('[guest] sticker upload failed full:', err)
       // Fallback: degrade to text.
       return answerGuestArticle(ctx, '⚠️ Failed to deliver quote sticker. Try again or run /q in PM.')
     }

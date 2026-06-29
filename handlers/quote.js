@@ -72,10 +72,15 @@ async function startClearStickerPack(stickerConfig = null) {
       if (!botInfo) botInfo = await telegram.getMe()
 
       const configToUse = stickerConfig || config || { globalStickerSet: { save_sticker_count: 10, name: 'default' } }
+      let setNamePrefix = configToUse.globalStickerSet.name || 'default'
+      if (!setNamePrefix.endsWith('_by_') && !setNamePrefix.endsWith('by_')) {
+        setNamePrefix = setNamePrefix.replace(/_$/, '') + '_by_'
+      }
+      const setName = setNamePrefix + botInfo.username
 
       // Add timeout to prevent hanging
       const stickerSet = await Promise.race([
-        telegram.getStickerSet(configToUse.globalStickerSet.name + botInfo.username),
+        telegram.getStickerSet(setName),
         new Promise((_, reject) => setTimeout(() => reject(new Error('getStickerSet timeout')), 10000))
       ]).catch((error) => {
         console.log('clearStickerPack error:', error)
