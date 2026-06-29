@@ -187,6 +187,7 @@ const uploadStickerForGuest = async (ctx, buffer) => {
   if (!setNamePrefix.endsWith('_by_') && !setNamePrefix.endsWith('by_')) {
     setNamePrefix = setNamePrefix.replace(/_$/, '') + '_by_'
   }
+  const me = ctx.botInfo || await ctx.telegram.getMe()
   const setName = setNamePrefix + me.username
   const ownerId = cfg.ownerId
   if (!ownerId) throw new Error('uploadStickerForGuest: missing globalStickerSet.ownerId')
