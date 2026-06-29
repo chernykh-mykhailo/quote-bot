@@ -358,7 +358,7 @@ module.exports = async (ctx, next) => {
     // Guest queries arrive from foreign chats — we have no chat membership and
     // no way to opt-in callers, so the safest default is to anonymise media
     // attribution as if the user had passed the `privacy` flag explicitly.
-    privacy: !!isGuestCtx,
+    privacy: false,
     ai: false,
     html: false,
     aiQuery: false,
