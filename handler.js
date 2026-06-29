@@ -128,6 +128,9 @@ bot.use(async (ctx, next) => {
   // fall through to ordinary handlers. Silently drop.
   if (!gm.guest_query_id) return
 
+  // Ignore guest messages that are stickers to prevent duplicate quote generation loop
+  if (gm.sticker) return
+
   // Mirror onto ctx.update.message so existing handlers (which look at
   // ctx.message) just work. The inbound guest_message carries the caller as
   // standard `from` and `chat` fields — `guest_bot_caller_*` are reserved
