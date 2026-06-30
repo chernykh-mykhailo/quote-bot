@@ -17,10 +17,16 @@ const errorWithTimestamp = (message, ...args) => {
 // updates whose chatId hashes into an unread queue.
 const WORKER_QUEUES = parseInt(process.env.WORKER_QUEUES, 10) || 3
 
+const https = require('https')
+const keepAliveAgent = new https.Agent({ keepAlive: true })
+
 class TelegramCollector {
   constructor() {
     this.bot = new Telegraf(process.env.BOT_TOKEN, {
-      handlerTimeout: 1000 // Fast timeout for collector
+      handlerTimeout: 1000, // Fast timeout for collector
+      telegram: {
+        agent: keepAliveAgent
+      }
     })
 
     // Single Redis connection for all operations

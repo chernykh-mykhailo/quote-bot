@@ -26,10 +26,16 @@ const errorWithTimestamp = (message, ...args) => {
   console.error(`[${new Date().toISOString()}] [WORKER-${workerId}] ${message}`, ...args)
 }
 
+const https = require('https')
+const keepAliveAgent = new https.Agent({ keepAlive: true })
+
 class TelegramProcessor {
   constructor () {
     this.bot = new Telegraf(process.env.BOT_TOKEN, {
-      handlerTimeout: 30000
+      handlerTimeout: 30000,
+      telegram: {
+        agent: keepAliveAgent
+      }
     })
 
     // Main Redis connection for queue and stats
