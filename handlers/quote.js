@@ -928,8 +928,13 @@ module.exports = async (ctx, next) => {
         }
       }
 
-      message.replyMessage.text = r.text || r.caption || undefined
-      message.replyMessage.entities = r.entities || r.caption_entities || undefined
+      if (quoteMessage.quote) {
+        message.replyMessage.text = quoteMessage.quote.text
+        message.replyMessage.entities = quoteMessage.quote.entities || undefined
+      } else {
+        message.replyMessage.text = r.text || r.caption || undefined
+        message.replyMessage.entities = r.entities || r.caption_entities || undefined
+      }
 
       // Save reply media metadata so the webapp can render a Telegram-style
       // preview (thumbnail + kind label). Without this, reply-to-media shows
