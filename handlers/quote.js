@@ -615,6 +615,17 @@ module.exports = async (ctx, next) => {
       else if (quoteMessage.from) messageFrom = quoteMessage.from
     }
 
+    if (messageFrom && messageFrom.id && !messageFrom.emoji_status && ctx.tdlib) {
+      try {
+        const fullUser = await ctx.tdlib.getUser(messageFrom.id)
+        if (fullUser && fullUser.emoji_status) {
+          messageFrom.emoji_status = fullUser.emoji_status
+        }
+      } catch (err) {
+        // Ignore error
+      }
+    }
+
     if (messageFrom.title) messageFrom.name = messageFrom.title
     if (messageFrom.first_name) messageFrom.name = messageFrom.first_name
     if (messageFrom.last_name) messageFrom.name += ' ' + messageFrom.last_name

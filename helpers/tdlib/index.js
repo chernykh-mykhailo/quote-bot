@@ -126,21 +126,26 @@ function sendMethod (method, parm) {
 
 function getUser (userID) {
   return new Promise((resolve, reject) => {
-    sendMethod('getUser', {
-      user_id: userID
-    }).then((response) => {
-      if (response._ === 'error') reject(new Error(`[TDLib][${response.code}] ${response.message}`))
-      const user = {
-        id: response.id,
-        first_name: response.first_name,
-        last_name: response.last_name,
-        username: response.username,
-        language_code: response.language_code,
-        emoji_status: response?.emoji_status?.custom_emoji_id
-      }
+    // Force TDLib to sync user info (and emoji_status) from Telegram servers
+    sendMethod('getUserFullInfo', { user_id: userID })
+      .catch(() => null)
+      .then(() => {
+        sendMethod('getUser', {
+          user_id: userID
+        }).then((response) => {
+          if (response._ === 'error') reject(new Error(`[TDLib][${response.code}] ${response.message}`))
+          const user = {
+            id: response.id,
+            first_name: response.first_name,
+            last_name: response.last_name,
+            username: response.usernames?.active_usernames?.[0] || response.username,
+            language_code: response.language_code,
+            emoji_status: response.emoji_status?.type?.custom_emoji_id || response.emoji_status?.custom_emoji_id
+          }
 
-      return resolve(user)
-    }).catch((console.error))
+          return resolve(user)
+        }).catch(reject)
+      })
   })
 }
 
@@ -320,7 +325,13 @@ function getMessages (chatID, messageIds) {
               })
 
               message.chat = chatInfo[messageInfo.chat_id]
-              if (messageInfo.sender_id.user_id) message.from = chatInfo[messageInfo.sender_id.user_id]
+              if (messageInfo.sender_id.user_id) {
+                message.from = chatInfo[messageInfo.sender_id.user_id]
+                // Propagate emoji_status from user info
+                if (message.from && !message.from.emoji_status && chatInfo[messageInfo.sender_id.user_id]?.emoji_status) {
+                  message.from.emoji_status = chatInfo[messageInfo.sender_id.user_id].emoji_status
+                }
+              }
               else if (messageInfo.sender_id.chat_id) message.from = chatInfo[messageInfo.sender_id.chat_id]
 
               if (messageInfo.forward_info) {
