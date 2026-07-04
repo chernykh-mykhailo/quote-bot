@@ -644,6 +644,7 @@ module.exports = async (ctx, next) => {
     if (lastSenderId !== null && effectiveSenderId === lastSenderId) diffUser = false
 
     const message = {}
+    if (quoteMessage.message_id) message.message_id = quoteMessage.message_id
     // Preserve the Telegram timestamp so the archive shows when the message
     // was actually sent, not when the quote was generated (denormalize-quote
     // reads this as the authoritative source.date for DMs).
