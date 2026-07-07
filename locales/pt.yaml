@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇧🇷 Português'
 description:
   short: |
@@ -80,8 +80,8 @@ help: |
   Retrô: <code>/qb blob</code>
 
   <b>📱 Precisa de Ajuda?</b>
-  • Blog: @LyBlog
-  • GitHub: github.com/LyoSU/quote-bot
+  • Blog: @MyshkoDe
+  • GitHub: github.com/chernykh-mykhailo/quote-bot
   • Suporte: <code>/donate</code>
 help_group: |
   <b>Olá! 👋</b>
@@ -108,7 +108,7 @@ quote:
     api_down: |
       😕 Nosso serviço de citações está temporariamente indisponível. Por favor, tente novamente em alguns minutos.
 
-      Se o problema persistir, verifique @LyBlog para atualizações.
+      Se o problema persistir, verifique @MyshkoDe para atualizações.
     rate_limit: |
       ⏳ Muitas solicitações! Por favor, aguarde ${seconds} segundos antes de criar outra citação.
     file_too_large: |
@@ -274,12 +274,13 @@ donate:
     • Tornar o bot mais rápido
 
     <b>💳 Opções de Pagamento Fáceis</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Pagamento com Cartão</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Pagamento com Cartão</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Criptomoedas (para usuários avançados)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Toda contribuição ajuda a tornar o QuotLyBot melhor para todos! 💜
   title: Suporte ${botUsername}

@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇹🇷 Türkçe'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>Yardıma mı ihtiyacınız var?</b>
 
-  • Blog: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • Blog: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • Destek: <code>/donate</code>
 help_group: |
   <b>Merhaba! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 Üzgünüz, alıntı hizmetimiz geçici olarak kullanılamıyor. Lütfen birkaç dakika sonra tekrar deneyin.
 
-      Sorun devam ederse, güncellemeler için @LyBlog'a göz atın.
+      Sorun devam ederse, güncellemeler için @MyshkoDe'a göz atın.
     rate_limit: |
       ⏳ Çok fazla istek! Yeni bir alıntı oluşturmadan önce lütfen ${seconds} saniye bekleyin.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • Botu daha hızlı hale getirmeyi
 
     <b>💳 Kolay Ödeme Seçenekleri</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Kart ile Ödeme</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Kart ile Ödeme</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Kripto Para (Teknoloji meraklıları için)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Her katkı, QuotLyBot'u herkes için daha iyi hale getirmeye yardımcı olur! 💜
   title: '${botUsername} Bağış Yap'

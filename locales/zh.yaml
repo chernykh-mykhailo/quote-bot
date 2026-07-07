@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇨🇳 简体中文'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>需要帮助?</b>
 
-  • 博客：<a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub：<a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • 博客：<a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub：<a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • 支持：<code>/donate</code>
 help_group: |
   <b>你好！👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 引用服务暂时不可用。请稍后再试。
 
-      如果问题仍然存在，请查看@LyBlog以获取更新。
+      如果问题仍然存在，请查看@MyshkoDe以获取更新。
     rate_limit: |
       ⏳ 请求过多！请等待${seconds}秒后再创建新的引用。
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • 让机器人运行得更快
 
     <b>💳 简单支付选项</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">银行卡支付</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">银行卡支付</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 加密货币（适合技术爱好者）</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     每一份贡献都在帮助让 QuotLyBot 变得更好！💜
   title: 支持 ${botUsername}

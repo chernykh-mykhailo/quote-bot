@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇰🇷 한국어'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>도움이 필요하신가요?</b>
 
-  • 블로그: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • 블로그: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • 지원: <code>/donate</code>
 help_group: |
   <b>안녕하세요! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 인용 서비스가 일시적으로 사용할 수 없습니다. 잠시 후 다시 시도해주세요.
 
-      문제가 지속되면 @LyBlog에서 업데이트를 확인하세요.
+      문제가 지속되면 @MyshkoDe에서 업데이트를 확인하세요.
     rate_limit: |
       ⏳ 요청이 너무 많습니다! 다른 인용을 생성하기 전에 ${seconds}초 기다려 주세요.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • 봇을 더 빠르게 만듬
 
     <b>💳 간편한 결제 옵션</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">카드 결제</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">카드 결제</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 암호화폐 (기술 애호가용)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     모든 기여는 QuotLyBot을 더 나은 서비스로 만드는데 도움이 됩니다! 💜
   title: '${botUsername} 지원하기'

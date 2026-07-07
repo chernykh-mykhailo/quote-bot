@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇧🇾 Беларуская'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>Патрэбна Дапамога?</b>
 
-  • Блог: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • Блог: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • Падтрымка: <code>/donate</code>
 help_group: |
   <b>Прывітанне! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 Наш сэрвіс цытат часова недаступны. Калі ласка, паспрабуйце праз некалькі хвілін.
 
-      Калі праблема захоўваецца, праверце @LyBlog на наяўнасць абнаўленняў.
+      Калі праблема захоўваецца, праверце @MyshkoDe на наяўнасць абнаўленняў.
     rate_limit: |
       ⏳ Занадта шмат запытаў! Пачакайце ${seconds} секунд, каб стварыць новую цытату.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • Рабіць бота хутчэйшым
 
     <b>💳 Простыя Спосабы Аплаты</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Аплата Карткай</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Аплата Карткай</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Крыптавалюта (для спрактыкаваных карыстальнікаў)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Кожны ўклад дапамагае зрабіць QuotLyBot лепшым для ўсіх! 💜
   title: Данат ${botUsername}

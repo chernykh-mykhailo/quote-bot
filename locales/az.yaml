@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇦🇿 Azərbaycanca'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>Kömək lazımdır?</b>
 
-  • Blog: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • Blog: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • Dəstək: <code>/donate</code>
 help_group: |
   <b>Salam! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 Təəssüf ki, hazırda bizim sitat xidmətimiz əlçatan deyil. Bir neçə dəqiqədən sonra yenidən cəhd edin.
 
-      Problem davam edərsə, yeniliklər üçün @LyBlog-u yoxlayın.
+      Problem davam edərsə, yeniliklər üçün @MyshkoDe-u yoxlayın.
     rate_limit: |
       ⏳ Çoxlu sorğu göndərildi! Başqa sitat yaratmadan əvvəl ${seconds} saniyə gözləyin.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • Botu daha sürətli etmək
 
     <b>💳 Sadə Ödəmə Seçimləri</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Kart Ödənişi</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Kart Ödənişi</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Kripto Valyuta (texnoloji istifadəçilər üçün)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Hər bir töhfə QuotLyBot'u daha da yaxşılaşdırır! 💜
   title: Dəstək ${botUsername}

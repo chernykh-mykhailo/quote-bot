@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇸🇦 عربي'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>بحاجة إلى مساعدة؟</b>
 
-  • المدونة: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • جيت هب: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • المدونة: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • جيت هب: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • الدعم: <code>/donate</code>
 help_group: |
   <b>مرحبًا! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 خدمة الاقتباس غير متوفرة مؤقتًا. حاول مرة أخرى بعد بضع دقائق.
 
-      إذا استمرت المشكلة، تحقق من @LyBlog للحصول على التحديثات.
+      إذا استمرت المشكلة، تحقق من @MyshkoDe للحصول على التحديثات.
     rate_limit: |
       ⏳ تم تقديم طلبات كثيرة جدًا! يرجى الانتظار ${seconds} ثانية قبل إنشاء اقتباس آخر.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • جعل الروبوت أسرع
 
     <b>💳 خيارات الدفع السهلة</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">الدفع عبر البطاقة</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">الدفع عبر البطاقة</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 العملة الرقمية (للمستخدمين المتمرسين)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     كل مساهمة تساعد في جعل QuotLyBot أفضل للجميع! 💜
   title: ادعم ${botUsername}

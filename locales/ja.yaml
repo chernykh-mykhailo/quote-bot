@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇯🇵 日本語'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>助けが必要？</b>
 
-  • ブログ: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • ブログ: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • サポート: <code>/donate</code>
 help_group: |
   <b>こんにちは！👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 申し訳ありませんが、引用サービスは一時的に利用できません。数分後にもう一度お試しください。
 
-      問題が解決しない場合は、@LyBlog を確認してください。
+      問題が解決しない場合は、@MyshkoDe を確認してください。
     rate_limit: |
       ⏳ リクエストが多すぎます！再び引用を作成する前に ${seconds} 秒お待ちください。
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • ボットを高速化
 
     <b>💳 簡単な支払いオプション</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">カード支払い</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">カード支払い</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 暗号通貨 (技術の得意な方向け)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     すべての貢献はQuotLyBotをより良くする手助けになります！💜
   title: '${botUsername}をサポート'

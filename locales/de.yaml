@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇩🇪 Deutsch'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>Brauchst du Hilfe?</b>
 
-  • Blog: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • Blog: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • Unterstützung: <code>/donate</code>
 help_group: |
   <b>Hallo! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 Unser Zitat-Service ist vorübergehend nicht verfügbar. Bitte versuche es in ein paar Minuten erneut.
 
-      Wenn das Problem weiterhin besteht, schau auf @LyBlog für Updates.
+      Wenn das Problem weiterhin besteht, schau auf @MyshkoDe für Updates.
     rate_limit: |
       ⏳ Zu viele Anfragen! Bitte warte ${seconds} Sekunden, bevor du ein weiteres Zitat erstellst.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • Den Bot schneller zu machen
 
     <b>💳 Einfache Zahlungsmöglichkeiten</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Kartenzahlung</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Kartenzahlung</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Kryptowährungen (für technisch Versierte)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Jeder Beitrag hilft, QuotLyBot für alle besser zu machen! 💜
   title: Unterstützen Sie ${botUsername}

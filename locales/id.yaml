@@ -1,4 +1,4 @@
----
+﻿---
 language_name: '🇮🇩 Indonesia'
 description:
   short: |
@@ -74,8 +74,8 @@ help: |
 
   📱 <b>Perlu Bantuan?</b>
 
-  • Blog: <a href="https://t.me/LyBlog">@LyBlog</a>
-  • GitHub: <a href="https://github.com/LyoSU/quote-bot">github.com/LyoSU/quote-bot</a>
+  • Blog: <a href="https://t.me/MyshkoDe">@MyshkoDe</a>
+  • GitHub: <a href="https://github.com/chernykh-mykhailo/quote-bot">github.com/chernykh-mykhailo/quote-bot</a>
   • Dukungan: <code>/donate</code>
 help_group: |
   <b>Halo! 👋</b>
@@ -102,7 +102,7 @@ quote:
     api_down: |
       😕 Layanan kutipan kami sedang tidak tersedia. Silakan coba lagi dalam beberapa menit.
 
-      Jika masalah terus berlanjut, periksa @LyBlog untuk pembaruan.
+      Jika masalah terus berlanjut, periksa @MyshkoDe untuk pembaruan.
     rate_limit: |
       ⏳ Terlalu banyak permintaan! Harap tunggu ${seconds} detik sebelum membuat kutipan lain.
     file_too_large: |
@@ -270,12 +270,13 @@ donate:
     • Membuat bot lebih cepat
 
     <b>💳 Opsi Pembayaran Mudah</b>
-    • <a href="https://send.monobank.ua/jar/2fpLioJzU8">Pembayaran Kartu</a> (Visa/Mastercard)
+    • <a href="https://send.monobank.ua/jar/9R29UVD9">Pembayaran Kartu</a> (Visa/Mastercard)
     • Apple Pay / Google Pay
+    • <a href="https://paypal.me/MyshkoDe/30EUR">PayPal</a>
 
     <b>🔒 Cryptocurrency (untuk pengguna melek teknologi)</b>
-    • BTC: <code>17QaN4wPZFaH4qtsgDdTaYwiW9s9PUcHj7</code>
-    • ETH/BUSD: <code>0x34007b75775F8DAe005A407141617aA2fBa2740c</code>
+    • BTC: <code>—</code>
+    • ETH/BUSD: <code>—</code>
 
     Setiap kontribusi membantu membuat QuotLyBot lebih baik untuk semua! 💜
   title: Dukungan ${botUsername}
