@@ -225,4 +225,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-Made with ❤️ by [LyoSU](https://github.com/LyoSU)
+Made with ❤️ by [chernykh-mykhailo](https://github.com/chernykh-mykhailo) — fork of [LyoSU/quote-bot](https://github.com/LyoSU/quote-bot)
