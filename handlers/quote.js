@@ -1310,7 +1310,15 @@ ${JSON.stringify(messageForAIContext)}
           let packOwnerId
           let packName
 
-          if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create && ctx.update.update_id % 5 === 0) {
+          // NOTE: The original code had `&& ctx.update.update_id % 5 === 0` here,
+          // which skipped the tempStickerSet path 80% of the time to reduce API calls
+          // (addStickerToSet + getStickerSet + deleteStickerFromSet = ~3 extra calls per quote).
+          // The downside: stickers were sent as raw file uploads most of the time,
+          // so Telegram showed "Add Stickers" instead of "Add to Sticker Set" in the context menu.
+          // Since each quote is a unique image (no file_id reuse), the caching benefit is negligible.
+          // At very high scale (millions of requests/day), consider re-introducing throttling
+          // (e.g. % 10) if Telegram API rate limits become a concern.
+          if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create) {
             packOwnerId = ctx.from.id
             packName = ctx.session.userInfo.tempStickerSet.name
           }
