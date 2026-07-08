@@ -1275,7 +1275,43 @@ ${JSON.stringify(messageForAIContext)}
         let sendResult
         const tSendStart = Date.now()
 
-        if (flag.privacy) {
+        // Always try to use sticker set for better UX (shows "Add to Sticker Set" option)
+        // Privacy mode only affects attribution, not sticker set membership
+        let useStickerSet = false
+        let packOwnerId
+        let packName
+
+        // Create temp sticker set if needed (same logic as non-privacy path)
+        if (ctx.session?.userInfo && !ctx.session?.userInfo?.tempStickerSet?.create) {
+          try {
+            const getMe = await telegram.getMe()
+            const packNameTemp = `temp_${Math.random().toString(36).substring(5)}_${Math.abs(ctx.from.id)}_by_${getMe.username}`
+            const packTitle = `Created by @${getMe.username}`
+
+            const created = await telegram.createNewStickerSet(ctx.from.id, packNameTemp, packTitle, {
+              png_sticker: { source: 'placeholder.png' },
+              emojis
+            })
+
+            ctx.session.userInfo.tempStickerSet.name = packNameTemp
+            ctx.session.userInfo.tempStickerSet.create = created
+            persistUserSetting(ctx, {
+              'tempStickerSet.name': packNameTemp,
+              'tempStickerSet.create': created
+            })
+          } catch (error) {
+            console.error('Failed to create sticker set in privacy mode:', error)
+          }
+        }
+
+        if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create) {
+          packOwnerId = ctx.from.id
+          packName = ctx.session.userInfo.tempStickerSet.name
+          useStickerSet = true
+        }
+
+        if (!useStickerSet || !packOwnerId || !packName) {
+          // Fallback to raw upload if sticker set is not available
           sendResult = await ctx.replyWithSticker({
             source: image,
             filename: 'quote.webp'
@@ -1287,43 +1323,20 @@ ${JSON.stringify(messageForAIContext)}
             business_connection_id: ctx.update?.business_message?.business_connection_id
           })
         } else {
-          if (ctx.session?.userInfo && !ctx.session?.userInfo?.tempStickerSet?.create) {
-            const getMe = await telegram.getMe()
+          // Add sticker to set and send via file_id
+          const addSticker = await ctx.tg.addStickerToSet(packOwnerId, packName.toLowerCase(), {
+            png_sticker: { source: image },
+            emojis
+          }, true).catch((error) => {
+            console.error(error)
+            if (error.description === 'Bad Request: STICKERSET_INVALID') {
+              ctx.session.userInfo.tempStickerSet.create = false
+              persistUserSetting(ctx, { 'tempStickerSet.create': false })
+            }
+          })
 
-            const packName = `temp_${Math.random().toString(36).substring(5)}_${Math.abs(ctx.from.id)}_by_${getMe.username}`
-            const packTitle = `Created by @${getMe.username}`
-
-            const created = await telegram.createNewStickerSet(ctx.from.id, packName, packTitle, {
-              png_sticker: { source: 'placeholder.png' },
-              emojis
-            }).catch(() => {
-            })
-
-            ctx.session.userInfo.tempStickerSet.name = packName
-            ctx.session.userInfo.tempStickerSet.create = created
-            persistUserSetting(ctx, {
-              'tempStickerSet.name': packName,
-              'tempStickerSet.create': created
-            })
-          }
-
-          let packOwnerId
-          let packName
-
-          // NOTE: The original code had `&& ctx.update.update_id % 5 === 0` here,
-          // which skipped the tempStickerSet path 80% of the time to reduce API calls
-          // (addStickerToSet + getStickerSet + deleteStickerFromSet = ~3 extra calls per quote).
-          // The downside: stickers were sent as raw file uploads most of the time,
-          // so Telegram showed "Add Stickers" instead of "Add to Sticker Set" in the context menu.
-          // Since each quote is a unique image (no file_id reuse), the caching benefit is negligible.
-          // At very high scale (millions of requests/day), consider re-introducing throttling
-          // (e.g. % 10) if Telegram API rate limits become a concern.
-          if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create) {
-            packOwnerId = ctx.from.id
-            packName = ctx.session.userInfo.tempStickerSet.name
-          }
-
-          if (!packOwnerId || !packName) {
+          if (!addSticker) {
+            // Fallback to raw upload if adding to set fails
             sendResult = await ctx.replyWithSticker({
               source: image,
               filename: 'quote.webp'
@@ -1335,41 +1348,23 @@ ${JSON.stringify(messageForAIContext)}
               business_connection_id: ctx.update?.business_message?.business_connection_id
             })
           } else {
-            const addSticker = await ctx.tg.addStickerToSet(packOwnerId, packName.toLowerCase(), {
-              png_sticker: { source: image },
-              emojis
-            }, true).catch((error) => {
-              console.error(error)
-              if (error.description === 'Bad Request: STICKERSET_INVALID') {
-                ctx.session.userInfo.tempStickerSet.create = false
-                persistUserSetting(ctx, { 'tempStickerSet.create': false })
-              }
-            })
-
-            if (!addSticker) {
-              return ctx.replyWithHTML(ctx.i18n.t('quote.error'), {
-                reply_to_message_id: ctx.message.message_id,
-                allow_sending_without_reply: true
-              })
-            }
-
-            const sticketSet = await ctx.getStickerSet(packName)
+            // Get the sticker set and send the latest sticker
+            const stickerSet = await ctx.getStickerSet(packName)
 
             if (ctx.session.userInfo.tempStickerSet.create) {
-              // Use for...of loop to properly handle async operations
+              // Clean up old stickers asynchronously
               (async () => {
-                for (const [index, sticker] of sticketSet.stickers.entries()) {
+                for (const [index, sticker] of stickerSet.stickers.entries()) {
                   if (index > currentConfig.globalStickerSet.save_sticker_count - 1) {
-                    // Delay deletion but don't block response
                     setTimeout(() => {
                       telegram.deleteStickerFromSet(sticker.file_id).catch(() => {})
-                    }, 3000 + (index * 100)) // Stagger deletions
+                    }, 3000 + (index * 100))
                   }
                 }
               })()
             }
 
-            sendResult = await ctx.replyWithSticker(sticketSet.stickers[sticketSet.stickers.length - 1].file_id, {
+            sendResult = await ctx.replyWithSticker(stickerSet.stickers[stickerSet.stickers.length - 1].file_id, {
               reply_to_message_id: ctx.message.message_id,
               allow_sending_without_reply: true,
               ...replyMarkup,
