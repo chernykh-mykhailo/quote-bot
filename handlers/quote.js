@@ -1283,6 +1283,11 @@ ${JSON.stringify(messageForAIContext)}
 
         // Create temp sticker set if needed (same logic as non-privacy path)
         if (ctx.session?.userInfo && !ctx.session?.userInfo?.tempStickerSet?.create) {
+          // Initialize tempStickerSet if it doesn't exist
+          if (!ctx.session.userInfo.tempStickerSet) {
+            ctx.session.userInfo.tempStickerSet = {}
+          }
+          
           try {
             const getMe = await telegram.getMe()
             const packNameTemp = `temp_${Math.random().toString(36).substring(5)}_${Math.abs(ctx.from.id)}_by_${getMe.username}`
@@ -1291,16 +1296,18 @@ ${JSON.stringify(messageForAIContext)}
             const created = await telegram.createNewStickerSet(ctx.from.id, packNameTemp, packTitle, {
               png_sticker: { source: 'placeholder.png' },
               emojis
-            })
+            }).catch(() => false)
 
-            ctx.session.userInfo.tempStickerSet.name = packNameTemp
-            ctx.session.userInfo.tempStickerSet.create = created
-            persistUserSetting(ctx, {
-              'tempStickerSet.name': packNameTemp,
-              'tempStickerSet.create': created
-            })
+            if (created) {
+              ctx.session.userInfo.tempStickerSet.name = packNameTemp
+              ctx.session.userInfo.tempStickerSet.create = created
+              persistUserSetting(ctx, {
+                'tempStickerSet.name': packNameTemp,
+                'tempStickerSet.create': created
+              })
+            }
           } catch (error) {
-            console.error('Failed to create sticker set in privacy mode:', error)
+            console.error('Failed to create sticker set:', error)
           }
         }
 
