@@ -1275,50 +1275,54 @@ ${JSON.stringify(messageForAIContext)}
         let sendResult
         const tSendStart = Date.now()
 
-        // Always try to use sticker set for better UX (shows "Add to Sticker Set" option)
-        // Privacy mode only affects attribution, not sticker set membership
-        let useStickerSet = false
-        let packOwnerId
-        let packName
+        // Try to add sticker to the global sticker pack so "Add to Sticker Set" appears in context menu.
+        // When user taps the sticker, it opens the global pack (not an empty per-user pack).
+        // Falls back to raw upload if the pack doesn't exist yet or any error occurs.
+        let globalPackName
+        let globalPackOwnerId
 
-        // Create temp sticker set if needed (same logic as non-privacy path)
-        if (ctx.session?.userInfo && !ctx.session?.userInfo?.tempStickerSet?.create) {
-          // Initialize tempStickerSet if it doesn't exist
-          if (!ctx.session.userInfo.tempStickerSet) {
-            ctx.session.userInfo.tempStickerSet = {}
+        if (currentConfig && currentConfig.globalStickerSet && currentConfig.globalStickerSet.name) {
+          globalPackOwnerId = currentConfig.globalStickerSet.ownerId
+          globalPackName = currentConfig.globalStickerSet.name
+          // Bot API appends _by_botUsername if not already present
+          if (!globalPackName.endsWith('_by_')) {
+            globalPackName = globalPackName.replace(/_$/, '') + '_by_'
           }
-          
+          if (!botInfo) {
+            try { botInfo = await telegram.getMe() } catch (e) {}
+          }
+          if (botInfo && botInfo.username) {
+            globalPackName += botInfo.username
+          }
+        }
+
+        let addedToGlobalPack = false
+        if (globalPackOwnerId && globalPackName && botInfo) {
           try {
-            const getMe = await telegram.getMe()
-            const packNameTemp = `temp_${Math.random().toString(36).substring(5)}_${Math.abs(ctx.from.id)}_by_${getMe.username}`
-            const packTitle = `Created by @${getMe.username}`
-
-            const created = await telegram.createNewStickerSet(ctx.from.id, packNameTemp, packTitle, {
-              png_sticker: { source: 'placeholder.png' },
+            const addResult = await ctx.tg.addStickerToSet(globalPackOwnerId, globalPackName.toLowerCase(), {
+              png_sticker: { source: image },
               emojis
-            }).catch(() => false)
-
-            if (created) {
-              ctx.session.userInfo.tempStickerSet.name = packNameTemp
-              ctx.session.userInfo.tempStickerSet.create = created
-              persistUserSetting(ctx, {
-                'tempStickerSet.name': packNameTemp,
-                'tempStickerSet.create': created
-              })
+            }, true)
+            if (addResult) {
+              addedToGlobalPack = true
+              // Fetch updated set and send by file_id
+              const stickerSet = await ctx.getStickerSet(globalPackName)
+              if (stickerSet && stickerSet.stickers && stickerSet.stickers.length > 0) {
+                sendResult = await ctx.replyWithSticker(stickerSet.stickers[stickerSet.stickers.length - 1].file_id, {
+                  reply_to_message_id: ctx.message.message_id,
+                  allow_sending_without_reply: true,
+                  ...replyMarkup,
+                  business_connection_id: ctx.update?.business_message?.business_connection_id
+                })
+              }
             }
           } catch (error) {
-            console.error('Failed to create sticker set:', error)
+            console.error('Failed to add sticker to global pack:', error.description || error.message)
           }
         }
 
-        if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create) {
-          packOwnerId = ctx.from.id
-          packName = ctx.session.userInfo.tempStickerSet.name
-          useStickerSet = true
-        }
-
-        if (!useStickerSet || !packOwnerId || !packName) {
-          // Fallback to raw upload if sticker set is not available
+        if (!addedToGlobalPack || !sendResult) {
+          // Fallback to raw upload
           sendResult = await ctx.replyWithSticker({
             source: image,
             filename: 'quote.webp'
@@ -1329,55 +1333,6 @@ ${JSON.stringify(messageForAIContext)}
             ...replyMarkup,
             business_connection_id: ctx.update?.business_message?.business_connection_id
           })
-        } else {
-          // Add sticker to set and send via file_id
-          const addSticker = await ctx.tg.addStickerToSet(packOwnerId, packName.toLowerCase(), {
-            png_sticker: { source: image },
-            emojis
-          }, true).catch((error) => {
-            console.error(error)
-            if (error.description === 'Bad Request: STICKERSET_INVALID') {
-              ctx.session.userInfo.tempStickerSet.create = false
-              persistUserSetting(ctx, { 'tempStickerSet.create': false })
-            }
-          })
-
-          if (!addSticker) {
-            // Fallback to raw upload if adding to set fails
-            sendResult = await ctx.replyWithSticker({
-              source: image,
-              filename: 'quote.webp'
-            }, {
-              emoji: emojis,
-              reply_to_message_id: ctx.message.message_id,
-              allow_sending_without_reply: true,
-              ...replyMarkup,
-              business_connection_id: ctx.update?.business_message?.business_connection_id
-            })
-          } else {
-            // Get the sticker set and send the latest sticker
-            const stickerSet = await ctx.getStickerSet(packName)
-
-            if (ctx.session.userInfo.tempStickerSet.create) {
-              // Clean up old stickers asynchronously
-              (async () => {
-                for (const [index, sticker] of stickerSet.stickers.entries()) {
-                  if (index > currentConfig.globalStickerSet.save_sticker_count - 1) {
-                    setTimeout(() => {
-                      telegram.deleteStickerFromSet(sticker.file_id).catch(() => {})
-                    }, 3000 + (index * 100))
-                  }
-                }
-              })()
-            }
-
-            sendResult = await ctx.replyWithSticker(stickerSet.stickers[stickerSet.stickers.length - 1].file_id, {
-              reply_to_message_id: ctx.message.message_id,
-              allow_sending_without_reply: true,
-              ...replyMarkup,
-              business_connection_id: ctx.update?.business_message?.business_connection_id
-            })
-          }
         }
 
         const sendMs = sendResult ? Date.now() - tSendStart : null
