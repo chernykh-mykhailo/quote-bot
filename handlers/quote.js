@@ -1275,38 +1275,73 @@ ${JSON.stringify(messageForAIContext)}
         let sendResult
         const tSendStart = Date.now()
 
-        // Try to add sticker to the global sticker pack so "Add to Sticker Set" appears in context menu.
-        // When user taps the sticker, it opens the global pack (not an empty per-user pack).
-        // Falls back to raw upload if the pack doesn't exist yet or any error occurs.
-        let globalPackName
-        let globalPackOwnerId
+        // Always try to add sticker to a sticker set so "Add to Sticker Set" appears in context menu.
+        // The sticker set is created per-user (temp_XXX_by_bot) on first quote and reused.
+        // Old stickers beyond save_sticker_count are cleaned up by startClearStickerPack.
+        // Privacy mode also uses sticker set — only attribution is affected.
+        let packOwnerId
+        let packName
 
-        if (currentConfig && currentConfig.globalStickerSet && currentConfig.globalStickerSet.name) {
-          globalPackOwnerId = currentConfig.globalStickerSet.ownerId
-          globalPackName = currentConfig.globalStickerSet.name
-          // Bot API appends _by_botUsername if not already present
-          if (!globalPackName.endsWith('_by_')) {
-            globalPackName = globalPackName.replace(/_$/, '') + '_by_'
+        if (ctx.session?.userInfo && !ctx.session?.userInfo?.tempStickerSet?.create) {
+          if (!ctx.session.userInfo.tempStickerSet) {
+            ctx.session.userInfo.tempStickerSet = {}
           }
-          if (!botInfo) {
-            try { botInfo = await telegram.getMe() } catch (e) {}
-          }
-          if (botInfo && botInfo.username) {
-            globalPackName += botInfo.username
+          try {
+            const getMe = await telegram.getMe()
+            const packNameTemp = `temp_${Math.random().toString(36).substring(5)}_${Math.abs(ctx.from.id)}_by_${getMe.username}`
+            const packTitle = `Created by @${getMe.username}`
+            const created = await telegram.createNewStickerSet(ctx.from.id, packNameTemp, packTitle, {
+              png_sticker: { source: 'placeholder.png' },
+              emojis
+            }).catch(() => undefined)
+            if (created) {
+              ctx.session.userInfo.tempStickerSet.name = packNameTemp
+              ctx.session.userInfo.tempStickerSet.create = created
+              persistUserSetting(ctx, {
+                'tempStickerSet.name': packNameTemp,
+                'tempStickerSet.create': created
+              })
+            }
+          } catch (error) {
+            console.error('Failed to create sticker set:', error)
           }
         }
 
-        let addedToGlobalPack = false
-        if (globalPackOwnerId && globalPackName && botInfo) {
+        if (ctx.session?.userInfo && ctx.session?.userInfo?.tempStickerSet?.create) {
+          packOwnerId = ctx.from.id
+          packName = ctx.session.userInfo.tempStickerSet.name
+        }
+
+        if (packOwnerId && packName) {
+          let addSticker = null
           try {
-            const addResult = await ctx.tg.addStickerToSet(globalPackOwnerId, globalPackName.toLowerCase(), {
+            addSticker = await ctx.tg.addStickerToSet(packOwnerId, packName.toLowerCase(), {
               png_sticker: { source: image },
               emojis
             }, true)
-            if (addResult) {
-              addedToGlobalPack = true
-              // Fetch updated set and send by file_id
-              const stickerSet = await ctx.getStickerSet(globalPackName)
+          } catch (error) {
+            console.error('Error adding sticker to set:', error)
+            if (error.description === 'Bad Request: STICKERSET_INVALID') {
+              ctx.session.userInfo.tempStickerSet.create = false
+              persistUserSetting(ctx, { 'tempStickerSet.create': false })
+            }
+          }
+
+          if (addSticker) {
+            try {
+              const stickerSet = await ctx.getStickerSet(packName)
+              if (ctx.session.userInfo.tempStickerSet.create && stickerSet && stickerSet.stickers) {
+                // Clean up old stickers asynchronously
+                (async () => {
+                  for (const [index, sticker] of stickerSet.stickers.entries()) {
+                    if (index > currentConfig.globalStickerSet.save_sticker_count - 1) {
+                      setTimeout(() => {
+                        telegram.deleteStickerFromSet(sticker.file_id).catch(() => {})
+                      }, 3000 + (index * 100))
+                    }
+                  }
+                })()
+              }
               if (stickerSet && stickerSet.stickers && stickerSet.stickers.length > 0) {
                 sendResult = await ctx.replyWithSticker(stickerSet.stickers[stickerSet.stickers.length - 1].file_id, {
                   reply_to_message_id: ctx.message.message_id,
@@ -1315,13 +1350,13 @@ ${JSON.stringify(messageForAIContext)}
                   business_connection_id: ctx.update?.business_message?.business_connection_id
                 })
               }
+            } catch (error) {
+              console.error('Error getting sticker set:', error)
             }
-          } catch (error) {
-            console.error('Failed to add sticker to global pack:', error.description || error.message)
           }
         }
 
-        if (!addedToGlobalPack || !sendResult) {
+        if (!sendResult) {
           // Fallback to raw upload
           sendResult = await ctx.replyWithSticker({
             source: image,
